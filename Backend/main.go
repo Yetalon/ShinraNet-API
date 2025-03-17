@@ -4,9 +4,8 @@ import (
 	"Backend/database"
 	"Backend/models"
 	"Backend/routes"
-	"log"
-
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func main() {

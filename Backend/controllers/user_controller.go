@@ -4,10 +4,9 @@ import (
 	"Backend/database"
 	"Backend/models"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 func CreateUser(c *gin.Context) {
@@ -114,6 +113,7 @@ func PatchUserName(c *gin.Context) {
 	name := c.DefaultQuery("name", "")
 	if name == "" {
 		c.String(http.StatusBadRequest, "invalid parameter")
+		return
 	}
 
 	if err := database.DB.Model(&models.User{}).Where("id = ?", userID).Update("username", name).Error; err != nil {
