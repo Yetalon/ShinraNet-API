@@ -4,14 +4,15 @@ import (
 	"Backend/database"
 	"Backend/models"
 	"Backend/routes"
-	"github.com/gin-gonic/gin"
 	"log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	database.ConnectDatabase()
-	database.DB.AutoMigrate(&models.User{})
-	database.DB.AutoMigrate(&models.Post{})
+	database.DB.Migrator().ColumnTypes(&models.Post{})
+	database.DB.Migrator().ColumnTypes(&models.User{})
 	router := gin.Default()
 	routes.RegisterRoutes(router)
 	port := ":8000"

@@ -24,6 +24,7 @@ func CreatePost(c *gin.Context) {
 
 func GetPostsByTitle(c *gin.Context) {
 	title := c.DefaultQuery("title", "")
+
 	var Posts []models.Post
 	if title == "" {
 		if err := database.DB.Find(&Posts).Error; err != nil {
@@ -31,6 +32,7 @@ func GetPostsByTitle(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, Posts)
+		return
 	} else {
 		if err := database.DB.Where("title = ?", title).First(&Posts).Error; err != nil {
 			c.JSON(http.StatusOK, Posts)
@@ -41,15 +43,16 @@ func GetPostsByTitle(c *gin.Context) {
 }
 
 func GetPostByUserId(c *gin.Context) {
-	id := c.Param("user_id")
+	id := c.Param("id")
 	userid, err := strconv.Atoi(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, "invalid id")
 		return
 	}
 	var Posts []models.Post
-	if err := database.DB.Where("id = ?", userid).Find(&Posts).Error; err != nil {
+	if err := database.DB.Where("user_id = ?", userid).Find(&Posts).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, "Failed to find posts")
+		return
 	}
 	c.JSON(http.StatusOK, Posts)
 }
